@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';  
 import { PriceService } from '../../services/price.service';
@@ -15,12 +15,15 @@ export class SearchComponent {
   searchQuery = '';
   location = 'Wright State University, Ohio';
   products: any[] = [];
+  hasSearched = false;
 
-  constructor(private priceService: PriceService) {}
+  constructor(private priceService: PriceService, private cdr: ChangeDetectorRef) {}
 
  onSearch() {
-    this.priceService
-      .searchProducts(this.searchQuery)
-      .subscribe(data => this.products = data);
+  this.hasSearched = true;
+  this.priceService.searchProducts(this.searchQuery).subscribe(data => {
+    this.products = data;
+    this.cdr.detectChanges();
+  })
   }
 }
