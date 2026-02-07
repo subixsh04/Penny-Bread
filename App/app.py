@@ -35,7 +35,7 @@ def search():
 
     results = [
         p for p in MOCK_PRODUCTS
-        if query in p["item"].lower()
+        if query == p["item"].lower()
     ]
 
     return jsonify(results)
@@ -48,7 +48,7 @@ def search_lowest():
     
     results = [
         p for p in MOCK_PRODUCTS
-        if query in p["item"].lower()
+        if query == p["item"].lower()
     ]
     
     sorted_products = sorted(results, key=lambda x: (x["price"], -x["stock"]))
