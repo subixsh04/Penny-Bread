@@ -4,7 +4,7 @@
   - Wyatt Sellers: sellers.58@wright.edu
   - Makaela Bennett: sellers.52@wright.edu
   - Emily Miller: miller.1771@wright.edu
-  - Subiksha Vaidhyanathan:
+  - Subiksha Vaidhyanathan: vaidhyanathan.2@wright.edu
   - Gary Maltby:
 
 ## Team Room
