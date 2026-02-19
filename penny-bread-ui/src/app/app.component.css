@@ -1,15 +1,73 @@
-:host {
-  display: block;
-  font-family: Arial, sans-serif;
+.app-shell {
+  min-height: 100vh;
+  background: var(--sand);
 }
 
-.mascot {
-  width: 120px;
+.app-header {
+  background: var(--chambray);
+  border-bottom: 2px solid rgba(58, 33, 25, 0.12);
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 0.75rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand-title {
+  font-family: "DM Serif Display", serif;
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  color: var(--espresso);
+  letter-spacing: 0.5px;
+  line-height: 1.05;
+}
+
+.brand-subtitle {
+  margin-top: 0.35rem;
+  font-size: 1.05rem;
+  color: rgba(58, 33, 25, 0.9);
+}
+
+.location-pill {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(58, 33, 25, 0.15);
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.header-hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.5rem 1.25rem 1.25rem;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-logo {
+  width: 110px;
   height: auto;
-  cursor: pointer;
-  transition: transform 0.2s ease;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 10px 22px rgba(58, 33, 25, 0.18));
 }
 
-.mascot:hover {
-  transform: scale(1.1) rotate(-2deg);
+.app-main {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media (max-width: 700px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .location-pill {
+    align-self: flex-start;
+  }
 }
