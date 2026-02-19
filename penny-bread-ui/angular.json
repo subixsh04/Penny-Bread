@@ -62,7 +62,8 @@
               "buildTarget": "penny-bread-ui:build:production"
             },
             "development": {
-              "buildTarget": "penny-bread-ui:build:development"
+              "buildTarget": "penny-bread-ui:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
