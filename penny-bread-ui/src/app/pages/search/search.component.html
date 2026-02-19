@@ -9,58 +9,72 @@
 
     <div class="store-tags">
       @for (store of stores; track store) {
-        <button
-          type="button"
-          [class.selected]="selectedStores.includes(store)"
-          (click)="selectStore(store)"
-        >
-          {{ store }}
-        </button>
+      <button type="button" [class.selected]="selectedStores.includes(store)" (click)="selectStore(store)">
+        {{ store }}
+      </button>
       }
     </div>
   </aside>
 
   <section class="main-area">
     <div class="search-bar">
-      <input
-        type="text"
-        placeholder="Search for an item (e.g., milk, bread, eggs)…"
-        [(ngModel)]="searchQuery"
-        (keydown.enter)="onSearch()"
-      />
+      <input type="text" placeholder="Search for an item (e.g., milk, bread, eggs)…" [(ngModel)]="searchQuery"
+        (keydown.enter)="onSearch()" />
       <button type="button" (click)="onSearch()" [disabled]="loading">
         {{ loading ? 'Searching…' : 'Search' }}
       </button>
     </div>
 
     @if (error) {
-      <div class="alert">{{ error }}</div>
+    <div class="alert">{{ error }}</div>
     }
 
     @if (loading) {
-      <div class="status">Searching stores…</div>
-    } @else if (hasSearched && filtered.length === 0 && !error) {
-      <div class="status">No results found. Try a different keyword.</div>
-    } @else if (filtered.length > 0) {
-      <div class="results">
-        @for (product of filtered; track product.store_name + '|' + product.product_name + '|' + product.price) {
-          <div class="product-card">
-            <div class="card-top">
-              <span class="store-badge">{{ product.store_name }}</span>
-              <span
-                class="stock-badge"
-                [class.ok]="product.stock > 0"
-                [class.bad]="product.stock <= 0"
-              >
-                {{ product.stock > 0 ? ('In stock: ' + product.stock) : 'Out of stock' }}
-              </span>
-            </div>
+    <div class="status">Searching stores…</div>
+    } @else if (hasSearched && sortedFiltered.length === 0 && !error) {
+    <div class="status">No results found. Try a different keyword.</div>
+    } @else if (sortedFiltered.length > 0) {
+    <div class="results-toolbar">
+      <div class="results-meta">
+        <div class="count">Showing <b>{{ sortedFiltered.length }}</b> result(s)</div>
 
-            <div class="product-name">{{ product.product_name }}</div>
-            <div class="price">{{ product.price | currency: 'USD':'symbol':'1.2-2' }}</div>
-          </div>
+        @if (selectedStores.length > 0) {
+        <div class="chips">
+          @for (store of selectedStores; track store) {
+          <button class="chip" type="button" (click)="removeStoreChip(store)">
+            {{ store }} <span class="x">×</span>
+          </button>
+          }
+        </div>
         }
       </div>
+
+      <div class="sort">
+        <label for="sortMode">Sort</label>
+        <select id="sortMode" [(ngModel)]="sortMode">
+          <option value="cheapest">Cheapest</option>
+          <option value="stock">Highest stock</option>
+          <option value="az">A → Z</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="results">
+      @for (product of sortedFiltered; track product.store_name + '|' + product.product_name + '|' + product.price) {
+      <div class="product-card">
+        <div class="card-top">
+          <span class="store-badge">{{ product.store_name }}</span>
+          <span class="stock-badge" [class.ok]="product.stock > 0" [class.bad]="product.stock <= 0">
+            {{ product.stock > 0 ? ('In stock: ' + product.stock) : 'Out of stock' }}
+          </span>
+        </div>
+
+        <div class="product-name">{{ product.product_name }}</div>
+        <div class="price">{{ product.price | currency: 'USD':'symbol':'1.2-2' }}</div>
+      </div>
+      }
+    </div>
     }
+
   </section>
 </div>
