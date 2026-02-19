@@ -2,19 +2,27 @@
     <header class="app-header">
         <div class="header-inner">
             <div class="brand">
-                <div class="brand-title">Penny Bread</div>
-                <div class="brand-subtitle">Find the lowest price near you!</div>
-            </div>
-
-            <div class="header-right">
-                <div class="location-pill">
-                📍 {{ location }}
+                <img class="brand-logo" src="assets/penny_main_transparent.gif" alt="Penny Bread logo"/>
+                <div class="brand-text">
+                    <div class="brand-title">Penny Bread</div>
+                    <div class="brand-subtitle">Find the lowest price near you!</div>
                 </div>
             </div>
+            <div class="header-actions">
+                <div class="location-pill">📍 {{ location }}</div>
+            </div>
         </div>
-
-        <div class="header-hero">
-            <img class="hero-logo" src="assets/penny_main_transparent.gif" alt="Penny Bread logo" />
+        <div class="toolbar">
+            <div class="toolbar-inner">
+                <div class="toolbar-left">
+                    <span class="toolbar-label">Quick actions</span>
+                    <span class="toolbar-hint">Search, filter, compare.</span>
+                </div>
+                <div class="toolbar-right">
+                    <button class="toolbar-btn" type="button" disabled>Sign in</button>
+                    <button class="toolbar-btn" type="button" disabled>Saved</button>
+                </div>
+            </div>
         </div>
     </header>
 
