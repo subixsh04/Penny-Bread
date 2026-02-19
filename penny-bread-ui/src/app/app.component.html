@@ -1,19 +1,24 @@
-<div class="app-wrapper">
-    <header class="hero">
-        <div class="hero-content">
-            <h1 class="app-title">Penny Bread</h1>
-            <p class="app-tagline">Find the lowest price near you!</p>
-
-            <img [src]="currentGif" alt="Penny the Loaf" class="mascot" (click)="playKissGif()" />
-
-            <div class="location">
-                <span>📍 {{ location }}</span>
+<div class="app-shell">
+    <header class="app-header">
+        <div class="header-inner">
+            <div class="brand">
+                <div class="brand-title">Penny Bread</div>
+                <div class="brand-subtitle">Find the lowest price near you!</div>
             </div>
+
+            <div class="header-right">
+                <div class="location-pill">
+                📍 {{ location }}
+                </div>
+            </div>
+        </div>
+
+        <div class="header-hero">
+            <img class="hero-logo" src="assets/penny_main_transparent.gif" alt="Penny Bread logo" />
         </div>
     </header>
 
-    <main class="main-content">
+    <main class="app-main">
         <app-search [location]="location"></app-search>
     </main>
-
 </div>
