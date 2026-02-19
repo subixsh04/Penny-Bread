@@ -1,21 +1,16 @@
 .app-shell {
   min-height: 100vh;
-  background: #f6f4ef; 
+  background: #f6f4ef;
 }
 
 .app-header {
-  padding: 1.5rem 1.25rem 0;
+  padding: 1.25rem 1.25rem 0;
   background: transparent;
-  border: none;
-}
-
-.header-inner,
-.header-hero {
-  max-width: 1100px;
-  margin: 0 auto;
 }
 
 .header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -23,17 +18,30 @@
   padding: 0 0.25rem;
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-logo {
+  width: 56px;
+  height: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 10px 18px rgba(47, 33, 26, 0.18));
+}
+
 .brand-title {
   font-family: "DM Serif Display", serif;
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-size: clamp(2.0rem, 3.6vw, 2.8rem);
   color: #2f211a;
   letter-spacing: 0.2px;
   line-height: 1.05;
 }
 
 .brand-subtitle {
-  margin-top: 0.35rem;
-  font-size: 1.05rem;
+  margin-top: 0.25rem;
+  font-size: 1.02rem;
   color: rgba(47, 33, 26, 0.75);
 }
 
@@ -47,23 +55,56 @@
   box-shadow: 0 8px 18px rgba(47, 33, 26, 0.06);
 }
 
-.header-hero {
-  margin-top: 1rem;
-  background: linear-gradient(180deg, rgba(121, 163, 195, 0.55), rgba(121, 163, 195, 0.22));
-  border: 1px solid rgba(47, 33, 26, 0.12);
-  border-radius: 22px;
-  padding: 1.25rem 1.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 18px 40px rgba(47, 33, 26, 0.10);
+.toolbar {
+  max-width: 1100px;
+  margin: 1rem auto 0;
+  padding: 0 0.25rem;
 }
 
-.hero-logo {
-  width: 110px;
-  height: auto;
-  image-rendering: pixelated;
-  filter: drop-shadow(0 14px 26px rgba(47, 33, 26, 0.18));
+.toolbar-inner {
+  border-radius: 18px;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid rgba(47, 33, 26, 0.12);
+  background: linear-gradient(
+    180deg,
+    rgba(121, 163, 195, 0.55),
+    rgba(121, 163, 195, 0.22)
+  );
+  box-shadow: 0 18px 40px rgba(47, 33, 26, 0.10);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.toolbar-label {
+  font-weight: 900;
+  color: rgba(47, 33, 26, 0.92);
+  margin-right: 0.5rem;
+}
+
+.toolbar-hint {
+  color: rgba(47, 33, 26, 0.75);
+}
+
+.toolbar-right {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.toolbar-btn {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(47, 33, 26, 0.14);
+  border-radius: 12px;
+  padding: 0.55rem 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.toolbar-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .app-main {
@@ -72,9 +113,23 @@
   padding-bottom: 2rem;
 }
 
+/* Mobile */
 @media (max-width: 700px) {
   .header-inner {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .toolbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .toolbar-right {
+    width: 100%;
+  }
+
+  .toolbar-btn {
+    width: 100%;
   }
 }
