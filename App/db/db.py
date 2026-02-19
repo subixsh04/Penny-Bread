@@ -1,38 +1,55 @@
 import os
+from pathlib import Path
 import pandas as pd
 import mysql.connector
 
+
+def find_makingdata_dir() -> Path:
+    """
+    Find the MakingData folder by walking upward from this file's location.
+    """
+    here = Path(__file__).resolve()
+    for parent in [here.parent] + list(here.parents):
+        candidate = parent / "MakingData"
+        if candidate.is_dir():
+            return candidate
+    raise FileNotFoundError(
+        f"Could not find 'MakingData' folder by searching upward from: {here}\n"
+    )
+
+
+# --- DB Connection (use your MySQL port 3307) ---
 conn = mysql.connector.connect(
-    host = "localhost",
-    port = 3307,
-    user = "root",
-    password = "password",
-    database = "groceryApp"
+    host="localhost",
+    port=3307,
+    user="root",
+    password="password",
+    database="groceryApp",
 )
 
 cursor = conn.cursor()
 
-DATA_FOLDER = os.path.join(os.getcwd(), "MakingData")
+DATA_FOLDER = find_makingdata_dir()
 
 store_files = {
     1: "Kroger.csv",
     2: "Meijer.csv",
     3: "Sam's_Club.csv",
     4: "Target.csv",
-    5: "Walmart.csv"
+    5: "Walmart.csv",
 }
 
-#inserting values into stores
+# Insert into stores
 for store_id, filename in store_files.items():
     store_name = filename.replace(".csv", "")
     cursor.execute(
         "INSERT IGNORE INTO stores (store_id, store_name) VALUES (%s, %s)",
-        (store_id, store_name)
+        (store_id, store_name),
     )
 
 conn.commit()
 
-#retriving column names from csv file
+
 def pick_col(cols, candidates):
     """Return matching column name from candidates, else None."""
     for c in candidates:
@@ -40,15 +57,23 @@ def pick_col(cols, candidates):
             return c
     return None
 
+
 product_cache = set()
 
-#creating products and inventory
+# Create products and inventory
 for store_id, filename in store_files.items():
-    path = os.path.join(DATA_FOLDER, filename)
+    path = DATA_FOLDER / filename
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Missing CSV: {path}\n"
+            f"DATA_FOLDER resolved to: {DATA_FOLDER}\n"
+            "Fix: ensure the CSV is in MakingData/ with the exact filename."
+        )
+
     df = pd.read_csv(path)
 
     df.columns = [c.strip().lower().replace(" ", "_") for c in df.columns]
-    df = df.loc[:, ~df.columns.str.startswith("unnamed")]  
+    df = df.loc[:, ~df.columns.str.startswith("unnamed")]
     cols = set(df.columns)
 
     id_col = pick_col(cols, ["id", "product_id", "item_id", "sku"])
@@ -71,7 +96,7 @@ for store_id, filename in store_files.items():
         stock_val = pd.to_numeric(row[stock_col], errors="coerce")
 
         if pd.isna(price_val):
-            continue  
+            continue
         if pd.isna(stock_val):
             stock_val = 0
 
@@ -82,15 +107,20 @@ for store_id, filename in store_files.items():
         if product_id not in product_cache:
             cursor.execute(
                 "INSERT IGNORE INTO products (product_id, product_name) VALUES (%s, %s)",
-                (product_id, product_name)
+                (product_id, product_name),
             )
             product_cache.add(product_id)
 
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO inventory (store_id, product_id, price, stock, in_stock)
             VALUES (%s, %s, %s, %s, %s)
-        """, (store_id, product_id, price, stock, in_stock))
+            """,
+            (store_id, product_id, price, stock, in_stock),
+        )
 
 conn.commit()
 cursor.close()
 conn.close()
+
+print(f"Loaded data successfully from: {DATA_FOLDER}")
