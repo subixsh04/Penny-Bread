@@ -1,63 +1,66 @@
 <div class="search-container">
-  <div class="sidebar">
-    <div class="store-tags">
-      <button *ngFor="let store of stores"
-              [class.selected]="selectedStores.includes(store)"
-              (click)="selectStore(store)">
-        {{ store }}
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Stores</div>
+      <button class="link-btn" (click)="clearFilters()" [disabled]="selectedStores.length === 0">
+        Clear
       </button>
     </div>
-  </div>
 
-  <div class="main-area">
+    <div class="store-tags">
+      @for (store of stores; track store) {
+        <button
+          type="button"
+          [class.selected]="selectedStores.includes(store)"
+          (click)="selectStore(store)"
+        >
+          {{ store }}
+        </button>
+      }
+    </div>
+  </aside>
+
+  <section class="main-area">
     <div class="search-bar">
-      <input type="text" placeholder="Search for an item..." [(ngModel)]="searchQuery" />
-      <button (click)="onSearch()">Search</button>
+      <input
+        type="text"
+        placeholder="Search for an item (e.g., milk, bread, eggs)…"
+        [(ngModel)]="searchQuery"
+        (keydown.enter)="onSearch()"
+      />
+      <button type="button" (click)="onSearch()" [disabled]="loading">
+        {{ loading ? 'Searching…' : 'Search' }}
+      </button>
     </div>
 
-    <div class ="results">
-      <div class="card product-card" *ngFor="let product of filteredProducts()">
-        <!--<img [src]="product.imageUrl" [alt]="product.name" /> -->
-        <div class="product-info">
-          <h3>{{ product.product_name }}</h3>
-          <p class="price">${{ product.price }}</p>
-          <p class="stock">In stock: {{ product.stock }}</p>
-          <p class="store">{{ product.store_name }}</p>
-        </div>
+    @if (error) {
+      <div class="alert">{{ error }}</div>
+    }
+
+    @if (loading) {
+      <div class="status">Searching stores…</div>
+    } @else if (hasSearched && filtered.length === 0 && !error) {
+      <div class="status">No results found. Try a different keyword.</div>
+    } @else if (filtered.length > 0) {
+      <div class="results">
+        @for (product of filtered; track product.store_name + '|' + product.product_name + '|' + product.price) {
+          <div class="product-card">
+            <div class="card-top">
+              <span class="store-badge">{{ product.store_name }}</span>
+              <span
+                class="stock-badge"
+                [class.ok]="product.stock > 0"
+                [class.bad]="product.stock <= 0"
+              >
+                {{ product.stock > 0 ? ('In stock: ' + product.stock) : 'Out of stock' }}
+              </span>
+            </div>
+
+            <div class="product-name">{{ product.product_name }}</div>
+            <div class="price">{{ product.price | currency: 'USD':'symbol':'1.2-2' }}</div>
+          </div>
+        }
       </div>
-    </div>
-  </div>
+    }
+  </section>
 </div>
-
-
-<!-- <div class="search-bar">
-  // Item search
-  <input
-    [(ngModel)]="searchQuery"
-    placeholder="Search for item"
-  />
-
-  <button (click)="onSearch()">Search</button>
-
-  // Location (locked)
-  <input
-    [(ngModel)]="location"
-    readonly
-    class="locked"
-  />
-
-  <button disabled>Location</button>
-</div>
-
-<div class="results">
-  <div *ngFor="let product of products" class="product-card">
-    <h3>{{ product.item }}</h3>
-    <p>{{ product.store }}</p>
-    <p>${{ product.price }}</p>
-    <p>Stock: {{ product.stock }}</p>
-  </div>
-</div>
-
-<div *ngIf="hasSearched && products.length === 0" class="no-results">
-  <p>No results found for "{{ searchQuery }}".</p>
-</div> -->
